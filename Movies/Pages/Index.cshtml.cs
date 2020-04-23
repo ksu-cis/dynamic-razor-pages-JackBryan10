@@ -17,50 +17,62 @@ namespace Movies.Pages
         /// <summary>
         /// The current search temrs
         /// </summary>
+        [BindProperty]
         public string SearchTerms { get; set; }
 
         /// <summary>
         /// The filtered MPAA Ratings
         /// </summary>
+        [BindProperty]
         public string[] MPAARatings { get; set; }
 
         /// <summary>
         /// The filtered Genres
         /// </summary>
+        [BindProperty]
         public string[] Genres { get; set; }
 
         /// <summary>
         /// The minimum IMDB Rating
         /// </summary>
+        [BindProperty]
         public double? IMDBMin { get; set; }
 
         /// <summary>
         /// The maximum IMDB Rating
         /// </summary>
+        [BindProperty]
         public double? IMDBMax { get; set; }
 
         /// <summary>
         /// The minimum Rotten Tomatoes Rating
         /// </summary>
+        [BindProperty]
         public double? RottenMin { get; set; }
 
         /// <summary>
         /// The maximum Rotten Tomatoes Rating
         /// </summary>
+        [BindProperty]
         public double? RottenMax { get; set; }
 
         /// <summary>
         /// Gets the search results for display on the page
         /// </summary>
-        public void OnGet(double? IMDBMin, double? IMDBMax, double? RottenMin, double? RottenMax)
+        public void OnGet()
         {
-            this.IMDBMin = IMDBMin;
-            this.IMDBMax = IMDBMax;
-            this.RottenMin = RottenMin;
-            this.RottenMax = RottenMax;
-            SearchTerms = Request.Query["SearchTerms"];
-            MPAARatings = Request.Query["MPAARatings"];
-            Genres = Request.Query["Genres"];
+            Movies = MovieDatabase.All;
+        }
+
+        /// <summary>
+        /// Posts the search results for display on the page
+        /// </summary>
+        /// <param name="IMDBMin">The minimum IMDB Rating</param>
+        /// <param name="IMDBMax">The maximum IMDB Rating</param>
+        /// <param name="RottenMin">The minimum Rotten Tomatoes Rating</param>
+        /// <param name="RottenMax">The maximum Rotten Tomatoes Rating</param>
+        public void OnPost()
+        {
             Movies = MovieDatabase.Search(SearchTerms);
             Movies = MovieDatabase.FilterByMPAARating(Movies, MPAARatings);
             Movies = MovieDatabase.FilterByGenre(Movies, Genres);
